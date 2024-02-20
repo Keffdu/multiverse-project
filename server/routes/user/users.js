@@ -4,6 +4,8 @@ const usersRouter  = express.Router();
 const { User, Item } = require("../../models");
 // const { check, validationResult } = require('express-validator');
 
+const { requiresAuth } = require('express-openid-connect');
+
 usersRouter.get("/", async (req, res, next) => {
   try {
     const users = await User.findAll();
@@ -26,7 +28,7 @@ usersRouter.get("/:username", async (req, res, next) => {
   }
 });
 
-usersRouter.get("/cart/:id", async (req, res, next) => {
+usersRouter.get("/cart/:id", requiresAuth(), async (req, res, next) => {
   try {
     const cart = await User.findOne({ where: { id: req.params.id }, include: Item });
     res.send(cart);
@@ -50,6 +52,7 @@ usersRouter.put("/editCart/:removeOrAdd/:userId/:itemId", async (req, res, next)
   }
 });
 
+// change to reflect auth0 -- get rid of 
 usersRouter.post("/", async (req, res, next) => {
 
   const { username, password } = req.body;

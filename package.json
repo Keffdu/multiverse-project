@@ -1,6 +1,6 @@
 {
-  "name": "inventoryapp",
-  "version": "1.2.0",
+  "name": "multiverse_project",
+  "version": "1.0.0",
   "scripts": {
     "tsc": "tsc",
     "test": "jest --watchAll",
