@@ -1,6 +1,5 @@
 // load environment variables from .env or elsewhere
 require('dotenv').config();
-const { User } = require('./models/index');
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
@@ -34,13 +33,6 @@ app.get('/', (req, res) => {
 // fetches auth0 user object
 app.get('/profile', requiresAuth(), (req, res) => {
   const profile = req.oidc.user;
-  const userObj = {
-    username: profile.email,
-    // CHANGE LATER
-    passwordHash: profile.nickname
-  };
-  console.log(profile.email);
-  User.create(userObj);
   res.send(profile);
 });
 
