@@ -1,10 +1,6 @@
-const Item = require('./Item');
-const User = require('./User');
+const Instrument = require('./Instrument');
 
-Item.belongsToMany(User, { through : 'cart' });
-User.belongsToMany(Item, { through : 'cart' });
 
 module.exports = {
-  Item,
-  User
+  Instrument,
 };
