@@ -52,7 +52,7 @@ usersRouter.put("/editCart/:removeOrAdd/:userId/:itemId", async (req, res, next)
   }
 });
 
-// change to reflect auth0 -- get rid of 
+// change to reflect auth0 -- get rid of
 usersRouter.post("/", async (req, res, next) => {
 
   const { username, password } = req.body;
