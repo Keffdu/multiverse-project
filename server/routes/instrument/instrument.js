@@ -1,6 +1,6 @@
 const express = require("express");
-const itemsRouter = express.Router();
-const { Item } = require("../../models");
+const instrumentsRouter = express.Router();
+const { Instrument } = require("../../models");
 const { check, validationResult } = require('express-validator');
 const { encrypt, decrypt } = require("../../utils/helperFunctions");
 
@@ -10,30 +10,30 @@ const { encrypt, decrypt } = require("../../utils/helperFunctions");
 // and mounting the middleware in each route like so: ('/', requiresAuth(), (req, res) => { ...
 
 // GET /sauce
-itemsRouter.get("/", async (req, res, next) => {
+instrumentsRouter.get("/", async (req, res, next) => {
   try {
-    let items = await Item.findAll();
+    let instruments = await Instrument.findAll();
 
     // decrypts sample sensitive info
-    items.forEach((item) => item.sampleSensitiveInfo = decrypt(item.sampleSensitiveInfo));
+    instruments.forEach((instrument) => instrument.price = decrypt(instrument.price));
 
-    res.send(items);
+    res.send(instruments);
   } catch (error) {
     next(error);
   }
 });
 
-itemsRouter.get("/:id", async (req, res, next) => {
+instrumentsRouter.get("/:id", async (req, res, next) => {
   try {
-    const item = await Item.findByPk(req.params.id);
-    item.sampleSensitiveInfo = decrypt(item.sampleSensitiveInfo);
-    res.send(item);
+    const instrument = await Instrument.findByPk(req.params.id);
+    instrument.price = decrypt(instrument.price);
+    res.send(instrument);
   } catch (error) {
     next(error);
   }
 });
 
-itemsRouter.post("/",
+instrumentsRouter.post("/",
   [check('name').not().isEmpty().trim().isLength({ max: 100 }),
     check('price').not().isEmpty().trim().isNumeric(),
     check('description').not().isEmpty().trim().isLength({ max:500 })],
@@ -42,15 +42,15 @@ itemsRouter.post("/",
 
     // this just simulates our sample sensitive Info to encrypt
     const testSensitiveInfo = "Info Decrypted";
-    req.body.sampleSensitiveInfo = encrypt(testSensitiveInfo);
+    req.body.price = encrypt(testSensitiveInfo);
 
     if(!errors.isEmpty()) {
       res.json({ errors : errors.array() });
     }
     else {
       try{
-        const newItem = await Item.create(req.body);
-        res.json(newItem);
+        const newInstrument = await Instrument.create(req.body);
+        res.json(newInstrument);
       }
       catch(error){
         next(error);
@@ -58,7 +58,7 @@ itemsRouter.post("/",
     }
   });
 
-itemsRouter.put("/:id",
+instrumentsRouter.put("/:id",
   [check('name').not().isEmpty().trim().isLength({ max: 100 }),
     check('price').not().isEmpty().trim().isNumeric(),
     check('description').not().isEmpty().trim().isLength({ max: 500 })],
@@ -70,24 +70,24 @@ itemsRouter.put("/:id",
     }
     else {
       try {
-        const item = await Item.findByPk(req.params.id);
-        const updatedItem = await item.update(req.body, { where:{ id: req.params.id } });
-        res.json({ message: "updated item " + updatedItem.name });
+        const instrument = await Instrument.findByPk(req.params.id);
+        const updatedInstrument = await instrument.update(req.body, { where:{ id: req.params.id } });
+        res.json({ message: "updated instrument " + updatedInstrument.name });
       } catch (error) {
         next(error);
       }
     }
   });
 
-itemsRouter.delete("/:id", async (req, res, next) => {
+instrumentsRouter.delete("/:id", async (req, res, next) => {
   try{
-    const item = await Item.findByPk(req.params.id);
-    await item.destroy();
-    res.json({ message: "Deleted item with id: " + req.params.id });
+    const instrument = await Instrument.findByPk(req.params.id);
+    await instrument.destroy();
+    res.json({ message: "Deleted instrument with id: " + req.params.id });
   }
   catch(error){
     next(error);
   }
 });
 
-module.exports = itemsRouter;
+module.exports = instrumentsRouter;

@@ -1,12 +1,12 @@
 const { db, DataTypes } = require('../db');
 
-const Item = db.define("items", {
+const Instrument = db.define("instruments", {
   name: DataTypes.STRING,
-  price: DataTypes.INTEGER,
+  brand: DataTypes.STRING,
+  price: DataTypes.STRING,
   description: DataTypes.STRING,
   category: DataTypes.STRING,
   image: DataTypes.STRING,
-  sampleSensitiveInfo: DataTypes.STRING
 });
 
-module.exports = Item;
+module.exports = Instrument;

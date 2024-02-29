@@ -1,10 +1,10 @@
 const bcrypt = require("bcrypt");
 
 // replace with items later
-const { items, users } = require('./seedData.js');
+const { instruments  } = require('./seedData.js');
 
 const { db } = require('./db');
-const { Item, User } = require('./models');
+const { Instrument } = require('./models');
 
 const seed = async () => {
 
@@ -13,20 +13,20 @@ const seed = async () => {
     await db.sync({ force: true });
 
     // insert data
-    const itemArr = await Item.bulkCreate(items);
+    const instrumentArr = await Instrument.bulkCreate(instruments);
 
     // this just hashes the passwords of the seed users for uniformity between seed data and user data created on client
-    for (const user of users){
-      user.passwordHash = await bcrypt.hash(user.passwordHash, 10);
-    }
+    // for (const user of users){
+    //   user.passwordHash = await bcrypt.hash(user.passwordHash, 10);
+    // }
 
-    const userArr = await User.bulkCreate(users);
+    // const userArr = await User.bulkCreate(users);
 
-    await userArr[0].setItems(itemArr[0]);
-    await userArr[0].setItems(itemArr[1]);
-    await itemArr[0].setUsers(userArr[0]);
-    await itemArr[1].setUsers(userArr[0]);
-    console.log(userArr[0].__proto__);
+    // await userArr[0].setItems(instrumentArr[0]);
+    // await userArr[0].setItems(instrumentArr[1]);
+    // await instrumentArr[0].setUsers(userArr[0]);
+    // await instrumentArr[1].setUsers(userArr[0]);
+    // console.log(userArr[0].__proto__);
 
     console.log("db populated!");
   } catch (error) {

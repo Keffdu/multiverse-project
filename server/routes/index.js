@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const itemsRouter = require('./item/items');
+const instrumentsRouter = require('./instrument/instrument');
 
 // different model routers
-router.use('/items', itemsRouter);
+router.use('/instruments', instrumentsRouter);
 
 module.exports = router;

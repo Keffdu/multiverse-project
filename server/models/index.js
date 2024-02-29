@@ -1,5 +1,6 @@
-const Item = require('./Item');
+const Instrument = require('./Instrument');
+
 
 module.exports = {
-  Item
+  Instrument,
 };
