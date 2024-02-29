@@ -1,4 +1,5 @@
 {
+  // Need to expand config to handle express
     "compilerOptions": {
       "target": "ES2020",
       "useDefineForClassFields": true,

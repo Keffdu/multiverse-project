@@ -1,5 +1,6 @@
 // load environment variables from .env or elsewhere
 require('dotenv').config();
+const { User } = require('./models/index')
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
@@ -7,7 +8,6 @@ const path = require('path');
 const cors = require('cors');
 const envConfig = require('./utils/config');
 
-// remove lines 12 - 37 if you do not intend to use auth0
 
 const { auth } = require('express-openid-connect');
 const { requiresAuth } = require('express-openid-connect');
@@ -18,7 +18,7 @@ const config = {
   secret: envConfig.SECRET,
   baseURL: 'http://localhost:3000',
   clientID: envConfig.CLIENT_ID,
-  issuerBaseURL: 'https://dev-fq1yk1ddeodd2ai7.us.auth0.com'
+  issuerBaseURL: envConfig.ISSUER_BASE_URL
 };
 
 // auth router attaches /login, /logout, and /callback routes to the baseURL
@@ -33,7 +33,15 @@ app.get('/', (req, res) => {
 
 // fetches auth0 user object
 app.get('/profile', requiresAuth(), (req, res) => {
-  res.send(JSON.stringify(req.oidc.user));
+  const profile = req.oidc.user
+  const userObj = {
+    username: profile.email,
+    // CHANGE LATER
+    passwordHash: profile.nickname
+  }
+  console.log(profile.email)
+  User.create(userObj)
+  res.send(profile);
 });
 
 //Allow CORS requests
