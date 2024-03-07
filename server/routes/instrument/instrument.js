@@ -3,6 +3,7 @@ const instrumentsRouter = express.Router();
 const { Instrument } = require("../../models");
 const { check, validationResult } = require('express-validator');
 const { encrypt, decrypt } = require("../../utils/helperFunctions");
+const { requiresAuth } = require('express-openid-connect');
 
 // Auth0 is complete as well. If you use Auth0 instead,
 // protect the routes you want proteced like so
@@ -40,9 +41,7 @@ instrumentsRouter.post("/",
   async (req, res, next) => {
     const errors = validationResult(req);
 
-    // this just simulates our sample sensitive Info to encrypt
-    const testSensitiveInfo = "Info Decrypted";
-    req.body.price = encrypt(testSensitiveInfo);
+    req.body.price = encrypt(req.body.price);
 
     if(!errors.isEmpty()) {
       res.json({ errors : errors.array() });
