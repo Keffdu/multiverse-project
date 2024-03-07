@@ -35,9 +35,9 @@ instrumentsRouter.get("/:id", async (req, res, next) => {
 });
 
 instrumentsRouter.post("/",
-  [check('name').not().isEmpty().trim().isLength({ max: 100 }),
-    check('price').not().isEmpty().trim().isNumeric(),
-    check('description').not().isEmpty().trim().isLength({ max:500 })],
+[check('name').not().isEmpty().trim().isLength({ max: 100 }),
+check('price').not().isEmpty().trim(),
+check('description').not().isEmpty().trim().isLength({ max: 1500 })],
   async (req, res, next) => {
     const errors = validationResult(req);
 
@@ -59,8 +59,8 @@ instrumentsRouter.post("/",
 
 instrumentsRouter.put("/:id",
   [check('name').not().isEmpty().trim().isLength({ max: 100 }),
-    check('price').not().isEmpty().trim().isNumeric(),
-    check('description').not().isEmpty().trim().isLength({ max: 500 })],
+    check('price').not().isEmpty().trim(),
+    check('description').not().isEmpty().trim().isLength({ max: 1500 })],
   async (req, res, next) => {
     const errors = validationResult(req);
 
