@@ -11,7 +11,7 @@ const { requiresAuth } = require('express-openid-connect');
 // and mounting the middleware in each route like so: ('/', requiresAuth(), (req, res) => { ...
 
 // GET /sauce
-instrumentsRouter.get("/", async (req, res, next) => {
+instrumentsRouter.get("/", requiresAuth(), async (req, res, next) => {
   try {
     let instruments = await Instrument.findAll();
 
@@ -24,7 +24,7 @@ instrumentsRouter.get("/", async (req, res, next) => {
   }
 });
 
-instrumentsRouter.get("/:id", async (req, res, next) => {
+instrumentsRouter.get("/:id", requiresAuth(), async (req, res, next) => {
   try {
     const instrument = await Instrument.findByPk(req.params.id);
     instrument.price = decrypt(instrument.price);
