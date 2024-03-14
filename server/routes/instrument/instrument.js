@@ -3,6 +3,7 @@ const instrumentsRouter = express.Router();
 const { Instrument } = require("../../models");
 const { check, validationResult } = require('express-validator');
 const { encrypt, decrypt } = require("../../utils/helperFunctions");
+const { requiresAuth } = require('express-openid-connect');
 
 // Auth0 is complete as well. If you use Auth0 instead,
 // protect the routes you want proteced like so
@@ -10,7 +11,7 @@ const { encrypt, decrypt } = require("../../utils/helperFunctions");
 // and mounting the middleware in each route like so: ('/', requiresAuth(), (req, res) => { ...
 
 // GET /sauce
-instrumentsRouter.get("/", async (req, res, next) => {
+instrumentsRouter.get("/", requiresAuth(), async (req, res, next) => {
   try {
     let instruments = await Instrument.findAll();
 
